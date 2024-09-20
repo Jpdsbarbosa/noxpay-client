@@ -2,8 +2,9 @@ package client
 
 import (
 	"net/http"
-	"noxpay-client/config"
 	"time"
+
+	"github.com/Jpdsbarbosa/noxpay-client/config"
 )
 
 // Client: estutura que mantém o cliente HTTP e configurações para fazer requisições
