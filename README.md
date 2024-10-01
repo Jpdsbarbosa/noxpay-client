@@ -114,10 +114,3 @@ Se houver algum erro ao iniciar o servidor, ele será exibido no console.
 
 Este projeto foi desenvolvido como parte de um teste técnico. O servidor roda localmente e os exemplos de requisições são baseados no ambiente local.
 ```
-
-### O que foi alterado:
-- Corrigi a estrutura do `README.md` para refletir o fato de que o código roda localmente.
-- Adicionei exemplos de como usar `curl` para testar os diferentes endpoints.
-- Retirei qualquer menção a uma configuração de ambiente remoto, pois o código será testado localmente.
-
-Isso deve ajudar a quem for testar seu código a realizar as chamadas de forma mais direta.
