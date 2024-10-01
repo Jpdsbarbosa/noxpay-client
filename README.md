@@ -34,7 +34,7 @@ Antes de utilizar a API NoxPay, você precisará da sua `API Key` e da `Base URL
 Para criar um pagamento via Pix, faça uma requisição `POST` à API com os dados do pagamento. O exemplo abaixo cria um pagamento no valor de 100.50 com o método "PIX".
 
 ```bash
-curl -X POST https://api2.noxpay.io/payments \
+curl -X POST https://api2.noxpay.io/payment/pix \
 -H "Authorization: Bearer sua-api-key-aqui" \
 -H "Content-Type: application/json" \
 -d '{
@@ -49,7 +49,7 @@ curl -X POST https://api2.noxpay.io/payments \
 Para criar um pagamento via cartão de crédito, envie uma requisição `POST` com as informações do cartão e do pagamento:
 
 ```bash
-curl -X POST https://api2.noxpay.io/payments \
+curl -X POST https://api2.noxpay.io//payment/creditcard \
 -H "Authorization: Bearer sua-api-key-aqui" \
 -H "Content-Type: application/json" \
 -d '{
@@ -69,7 +69,7 @@ curl -X POST https://api2.noxpay.io/payments \
 Para consultar o status de um pagamento já criado, basta fazer uma requisição `GET` à API, passando o ID da transação:
 
 ```bash
-curl -X GET https://api2.noxpay.io/payments/{id-do-pagamento} \
+curl -X GET https://api2.noxpay.io/payment/{id-do-pagamento} \
 -H "Authorization: Bearer sua-api-key-aqui"
 ```
 
@@ -78,7 +78,7 @@ curl -X GET https://api2.noxpay.io/payments/{id-do-pagamento} \
 Para obter os dados da sua conta, você pode usar o seguinte comando `cURL`:
 
 ```bash
-curl -X GET https://api2.noxpay.io/account \
+curl -X GET https://api2.noxpay.io/aaccount-data \
 -H "Authorization: Bearer sua-api-key-aqui"
 ```
 
