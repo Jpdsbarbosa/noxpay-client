@@ -1,107 +1,123 @@
-# NoxPay Client
+# NoxPay API Client
 
-Esta é uma biblioteca Go para integração com a API de pagamentos da NoxPay, fornecendo operações básicas como criar pagamentos, consultar o status de pagamentos e obter dados da conta. O projeto inclui exemplos prontos para rodar e suporte para diferentes métodos de pagamento, como Pix e cartão de crédito.
+Este projeto implementa um cliente para a API da NoxPay, que permite a criação de pagamentos por Pix e cartão de crédito, além da consulta de pagamentos e obtenção de dados da conta. O servidor foi feito para rodar localmente e expõe vários endpoints para interagir com a API.
 
-## Índice
+## Requisitos
 
-- [Instalação](#instalação)
-- [Configuração](#configuração)
-- [Uso](#uso)
-  - [Criar Pagamento (Pix)](#criar-pagamento-pix)
-  - [Criar Pagamento (Cartão de Crédito)](#criar-pagamento-cartão-de-crédito)
-  - [Consultar Pagamento](#consultar-pagamento)
-  - [Obter Dados da Conta](#obter-dados-da-conta)
-- [Executar o Servidor](#executar-o-servidor)
-- [Testes](#testes)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
+- Go 1.20+
+- Uma conta na NoxPay com uma API Key válida
 
 ## Instalação
 
-Você pode usar a biblioteca diretamente em seu projeto Go, mas os exemplos abaixo mostram como realizar requisições diretamente com `cURL` para interagir com a API NoxPay.
-
-## Configuração
-
-Antes de utilizar a API NoxPay, você precisará da sua `API Key` e da `Base URL`. No exemplo abaixo, usamos a URL padrão da API NoxPay:
-
-- **Base URL**: `https://api2.noxpay.io`
-- **API Key**: `sua-api-key-aqui`
-
-## Uso
-
-### Criar Pagamento (Pix)
-
-Para criar um pagamento via Pix, faça uma requisição `POST` à API com os dados do pagamento. O exemplo abaixo cria um pagamento no valor de 100.50 com o método "PIX".
+1. Clone o repositório:
 
 ```bash
-curl -X POST https://api2.noxpay.io/payment/pix \
--H "Authorization: Bearer sua-api-key-aqui" \
--H "Content-Type: application/json" \
--d '{
-  "method": "PIX",
-  "code": "123456",
-  "amount": 100.50
-}'
+git clone https://github.com/Jpdsbarbosa/noxpay-client.git
+cd noxpay-client
 ```
 
-### Criar Pagamento (Cartão de Crédito)
-
-Para criar um pagamento via cartão de crédito, envie uma requisição `POST` com as informações do cartão e do pagamento:
+2. Instale as dependências:
 
 ```bash
-curl -X POST https://api2.noxpay.io//payment/creditcard \
--H "Authorization: Bearer sua-api-key-aqui" \
--H "Content-Type: application/json" \
--d '{
-  "method": "CREDIT_CARD",
-  "code": "123456",
-  "amount": 250.00,
-  "email": "cliente@email.com",
-  "name": "Cliente Teste",
-  "cpf_cnpj": "123.456.789-00",
-  "max_installments_value": 12,
-  "soft_descriptor_light": "CompraTest"
-}'
+go mod tidy
 ```
 
-### Consultar Pagamento
-
-Para consultar o status de um pagamento já criado, basta fazer uma requisição `GET` à API, passando o ID da transação:
+3. Execute o servidor localmente:
 
 ```bash
-curl -X GET https://api2.noxpay.io/payment/{id-do-pagamento} \
--H "Authorization: Bearer sua-api-key-aqui"
+go run main.go
 ```
 
-### Obter Dados da Conta
+O servidor será iniciado na porta `8080`.
 
-Para obter os dados da sua conta, você pode usar o seguinte comando `cURL`:
+## Endpoints
+
+Abaixo estão os endpoints disponíveis e como realizar as requisições usando `curl`.
+
+### 1. Criar Pagamento por Pix
+
+**Endpoint**: `/payment/pix`  
+**Método**: `POST`
+
+**Exemplo de requisição**:
 
 ```bash
-curl -X GET https://api2.noxpay.io/aaccount-data \
--H "Authorization: Bearer sua-api-key-aqui"
+curl -X POST http://localhost:8080/payment/pix \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1000,
+    "currency": "BRL",
+    "description": "Pagamento teste via Pix"
+  }'
 ```
 
-## Executar o Servidor
+### 2. Consultar Pagamento
 
-Caso esteja utilizando esta biblioteca como base para um serviço, certifique-se de que as variáveis de ambiente para `API Key` e `Base URL` estão configuradas corretamente no seu ambiente de desenvolvimento.
+**Endpoint**: `/payment/{payment_id}`  
+**Método**: `GET`
 
-## Testes
-
-Para rodar os testes da biblioteca, execute o seguinte comando:
+**Exemplo de requisição**:
 
 ```bash
-go test ./...
+curl -X GET http://localhost:8080/payment/{payment_id}
 ```
 
-Os testes utilizam mocks para simular as respostas da API.
+Substitua `{payment_id}` pelo ID do pagamento que deseja consultar.
 
-## Contribuição
+### 3. Criar Pagamento por Cartão de Crédito
 
-Contribuições são bem-vindas! Por favor, abra um *pull request* ou envie sugestões na seção de *issues*.
+**Endpoint**: `/payment/creditcard`  
+**Método**: `POST`
 
-## Licença
+**Exemplo de requisição**:
 
-Este projeto está licenciado sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+```bash
+curl -X POST http://localhost:8080/payment/creditcard \
+  -H "Content-Type: application/json" \
+  -d '{
+    "amount": 1000,
+    "currency": "BRL",
+    "description": "Pagamento teste via Cartão de Crédito",
+    "card_number": "4111111111111111",
+    "expiration_date": "12/25",
+    "cvv": "123"
+  }'
+```
 
----
+### 4. Obter Dados da Conta
+
+**Endpoint**: `/account-data`  
+**Método**: `GET`
+
+**Exemplo de requisição**:
+
+```bash
+curl -X GET http://localhost:8080/account-data
+```
+
+## Estrutura do Projeto
+
+- `main.go`: Contém a inicialização do servidor e o roteamento dos endpoints.
+- `pkg/handlers`: Contém os manipuladores de endpoints que lidam com as requisições HTTP.
+
+## Logs
+
+Os logs do servidor são exibidos no console. Exemplo de log ao iniciar o servidor:
+
+```
+Servidor iniciado na porta 8080
+```
+
+Se houver algum erro ao iniciar o servidor, ele será exibido no console.
+
+## Considerações Finais
+
+Este projeto foi desenvolvido como parte de um teste técnico. O servidor roda localmente e os exemplos de requisições são baseados no ambiente local.
+```
+
+### O que foi alterado:
+- Corrigi a estrutura do `README.md` para refletir o fato de que o código roda localmente.
+- Adicionei exemplos de como usar `curl` para testar os diferentes endpoints.
+- Retirei qualquer menção a uma configuração de ambiente remoto, pois o código será testado localmente.
+
+Isso deve ajudar a quem for testar seu código a realizar as chamadas de forma mais direta.
