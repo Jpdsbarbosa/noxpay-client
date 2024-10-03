@@ -92,4 +92,4 @@ Se houver algum erro ao iniciar o servidor, ele será exibido no console.
 
 ## Considerações Finais
 
-Este projeto foi desenvolvido como parte de um teste técnico. O servidor roda localmente e os exemplos de requisições são baseados no ambiente local.
+Este client foi desenvolvido como parte de um teste técnico. O servidor roda localmente e os exemplos de requisições são baseados no ambiente local.
