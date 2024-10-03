@@ -4,7 +4,7 @@ package models
 // Inclui informações sobre o método de pagamento, código único do pagamento, valor,
 // e opcionalmente, uma URL de webhook, nome do cliente e documento do cliente.
 type PaymentRequest struct {
-	Method         string  `json:"method"`                    // Método de pagamento (ex: PIX, CREDIT_CARD).
+	Method         string  `json:"method"`                    // Método de pagamento (ex: PIX).
 	Code           string  `json:"code"`                      // Código único identificador do pagamento.
 	Amount         float64 `json:"amount"`                    // Valor do pagamento.
 	WebhookURL     string  `json:"webhook_url,omitempty"`     // URL de webhook para notificações (opcional).
