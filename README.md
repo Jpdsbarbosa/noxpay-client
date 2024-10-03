@@ -36,7 +36,7 @@ Abaixo estão os endpoints disponíveis e como realizar as requisições usando 
 
 ### 1. Criar Pagamento por Pix
 
-**Endpoint**: `/payment/pix`  
+**Endpoint**: `/payment`  
 **Método**: `POST`
 
 **Exemplo de requisição**:
@@ -45,9 +45,9 @@ Abaixo estão os endpoints disponíveis e como realizar as requisições usando 
 curl -X POST http://localhost:8080/payment/pix \
   -H "Content-Type: application/json" \
   -d '{
+    "method": "Pix"
     "amount": 1000,
-    "currency": "BRL",
-    "description": "Pagamento teste via Pix"
+    "code": "123456",
   }'
 ```
 
@@ -63,26 +63,6 @@ curl -X GET http://localhost:8080/payment/{payment_id}
 ```
 
 Substitua `{payment_id}` pelo ID do pagamento que deseja consultar.
-
-### 3. Criar Pagamento por Cartão de Crédito
-
-**Endpoint**: `/payment/creditcard`  
-**Método**: `POST`
-
-**Exemplo de requisição**:
-
-```bash
-curl -X POST http://localhost:8080/payment/creditcard \
-  -H "Content-Type: application/json" \
-  -d '{
-    "amount": 1000,
-    "currency": "BRL",
-    "description": "Pagamento teste via Cartão de Crédito",
-    "card_number": "4111111111111111",
-    "expiration_date": "12/25",
-    "cvv": "123"
-  }'
-```
 
 ### 4. Obter Dados da Conta
 
