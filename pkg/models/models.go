@@ -1,42 +1,34 @@
 package models
 
 // PaymentRequest representa a estrutura de dados para uma requisição de pagamento.
+// Inclui informações sobre o método de pagamento, código único do pagamento, valor,
+// e opcionalmente, uma URL de webhook, nome do cliente e documento do cliente.
 type PaymentRequest struct {
-	Method         string  `json:"method"`
-	Code           string  `json:"code"`
-	Amount         float64 `json:"amount"`
-	WebhookURL     string  `json:"webhook_url,omitempty"`
-	ClientName     string  `json:"client_name,omitempty"`
-	ClientDocument string  `json:"client_document,omitempty"`
+	Method         string  `json:"method"`                    // Método de pagamento (ex: PIX, CREDIT_CARD).
+	Code           string  `json:"code"`                      // Código único identificador do pagamento.
+	Amount         float64 `json:"amount"`                    // Valor do pagamento.
+	WebhookURL     string  `json:"webhook_url,omitempty"`     // URL de webhook para notificações (opcional).
+	ClientName     string  `json:"client_name,omitempty"`     // Nome do cliente (opcional).
+	ClientDocument string  `json:"client_document,omitempty"` // Documento do cliente (CPF/CNPJ) (opcional).
 }
 
 // PaymentResponse representa a estrutura de dados para a resposta de um pagamento.
+// Contém detalhes sobre o método, status, código, identificador de transação (TxID),
+// valor, e opcionalmente, QR Code e informações para cópia e colagem.
 type PaymentResponse struct {
-	Method       string  `json:"method"`
-	Status       string  `json:"status"`
-	Code         string  `json:"code"`
-	TxID         string  `json:"txid"`
-	Amount       float64 `json:"amount"`
-	QRCode       string  `json:"qrcode,omitempty"`
-	QRCodeBase64 string  `json:"qrcodebase64,omitempty"`
-	CopyPaste    string  `json:"copypaste,omitempty"`
+	Method       string  `json:"method"`                 // Método de pagamento utilizado.
+	Status       string  `json:"status"`                 // Status atual do pagamento.
+	Code         string  `json:"code"`                   // Código único identificador do pagamento.
+	TxID         string  `json:"txid"`                   // Identificador único da transação.
+	Amount       float64 `json:"amount"`                 // Valor do pagamento.
+	QRCode       string  `json:"qrcode,omitempty"`       // URL do QR Code para pagamento (opcional).
+	QRCodeBase64 string  `json:"qrcodebase64,omitempty"` // QR Code em formato base64 (opcional).
+	CopyPaste    string  `json:"copypaste,omitempty"`    // String para cópia e colagem (opcional).
 }
 
 // AccountData representa a estrutura de dados para informações da conta.
+// Inclui o nome da conta e o saldo atual.
 type AccountData struct {
-	Name    string  `json:"name"`
-	Balance float64 `json:"balance"`
-}
-
-// CreditCardPaymentRequest representa a estrutura de dados para uma requisição de pagamento por cartão de crédito.
-type CreditCardPaymentRequest struct {
-	Code                 string  `json:"code"`
-	Amount               float64 `json:"amount"`
-	Email                string  `json:"email"`
-	Name                 string  `json:"name"`
-	CpfCnpj              string  `json:"cpf_cnpj"`
-	ExpiredUrl           string  `json:"expired_url"`
-	ReturnUrl            string  `json:"return_url"`
-	MaxInstallmentsValue int     `json:"max_installments_value"`
-	SoftDescriptorLight  string  `json:"soft_descriptor_light"`
+	Name    string  `json:"name"`    // Nome da conta.
+	Balance float64 `json:"balance"` // Saldo atual da conta.
 }
