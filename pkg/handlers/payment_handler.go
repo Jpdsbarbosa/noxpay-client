@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 
@@ -9,9 +10,11 @@ import (
 	"github.com/Jpdsbarbosa/noxpay-client/pkg/noxpay"
 )
 
-// CreatePaymentHandler é o handler para criar um novo pagamento
+// CreatePaymentHandler lida com a criação de novos pagamentos.
+// Aceita apenas métodos POST e espera um corpo de requisição JSON com os dados do pagamento.
 func CreatePaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
+		log.Printf("CreatePaymentHandler: método não permitido %v", r.Method)
 		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
 		return
 	}
@@ -19,67 +22,53 @@ func CreatePaymentHandler(w http.ResponseWriter, r *http.Request) {
 	var paymentRequest models.PaymentRequest
 	err := json.NewDecoder(r.Body).Decode(&paymentRequest)
 	if err != nil {
+		log.Printf("CreatePaymentHandler: erro ao decodificar o pedido %v", err)
 		http.Error(w, "Erro ao decodificar o pedido", http.StatusBadRequest)
 		return
 	}
 
-	client := noxpay.NewClient()
+	client := noxpay.NewClient(noxpay.BaseURL, noxpay.APIKey)
 	paymentResponse, err := client.CreatePayment(paymentRequest)
 	if err != nil {
+		log.Printf("CreatePaymentHandler: erro ao criar pagamento %v", err)
 		http.Error(w, "Erro ao criar pagamento", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(paymentResponse)
+	if err := json.NewEncoder(w).Encode(paymentResponse); err != nil {
+		log.Printf("CreatePaymentHandler: erro ao codificar resposta JSON %v", err)
+		http.Error(w, "Erro ao processar resposta", http.StatusInternalServerError)
+	}
 }
 
-// ConsultPaymentHandler é o handler para consultar os detalhes de um pagamento
+// ConsultPaymentHandler lida com a consulta de detalhes de pagamentos existentes.
+// Aceita apenas métodos GET e espera um txID como parte da URL.
 func ConsultPaymentHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
+		log.Printf("ConsultPaymentHandler: método não permitido %v", r.Method)
 		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Extrai o txID da URL
 	txID := strings.TrimPrefix(r.URL.Path, "/payment/")
 	if txID == "" {
+		log.Printf("ConsultPaymentHandler: ID do pagamento não fornecido")
 		http.Error(w, "ID do pagamento não fornecido", http.StatusBadRequest)
 		return
 	}
 
-	client := noxpay.NewClient()
+	client := noxpay.NewClient(noxpay.BaseURL, noxpay.APIKey)
 	paymentResponse, err := client.ConsultPayment(txID)
 	if err != nil {
+		log.Printf("ConsultPaymentHandler: erro ao consultar pagamento %v", err)
 		http.Error(w, "Erro ao consultar pagamento", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(paymentResponse)
-}
-
-// CreateCreditCardPaymentHandler é o handler para criar um novo pagamento por cartão de crédito
-func CreateCreditCardPaymentHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		http.Error(w, "Método não permitido", http.StatusMethodNotAllowed)
-		return
+	if err := json.NewEncoder(w).Encode(paymentResponse); err != nil {
+		log.Printf("ConsultPaymentHandler: erro ao codificar resposta JSON %v", err)
+		http.Error(w, "Erro ao processar resposta", http.StatusInternalServerError)
 	}
-
-	var ccPaymentRequest models.CreditCardPaymentRequest
-	err := json.NewDecoder(r.Body).Decode(&ccPaymentRequest)
-	if err != nil {
-		http.Error(w, "Erro ao decodificar o pedido", http.StatusBadRequest)
-		return
-	}
-
-	client := noxpay.NewClient()
-	paymentResponse, err := client.CreateCreditCardPayment(ccPaymentRequest)
-	if err != nil {
-		http.Error(w, "Erro ao criar pagamento por cartão de crédito", http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(paymentResponse)
 }
