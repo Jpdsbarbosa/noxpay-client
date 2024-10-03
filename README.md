@@ -64,7 +64,7 @@ curl -X GET http://localhost:8080/payment/{payment_id}
 
 Substitua `{payment_id}` pelo ID do pagamento que deseja consultar.
 
-### 4. Obter Dados da Conta
+### 3. Obter Dados da Conta
 
 **Endpoint**: `/account-data`  
 **Método**: `GET`
