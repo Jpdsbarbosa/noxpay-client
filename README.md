@@ -13,7 +13,7 @@ Este projeto implementa um cliente para a API da NoxPay, que permite a criação
 
 ```bash
 git clone https://github.com/Jpdsbarbosa/noxpay-client.git
-cd cmd/noxpay-client
+cd noxpay-client
 ```
 
 2. Instale as dependências:
@@ -25,7 +25,7 @@ go mod tidy
 3. Execute o servidor localmente:
 
 ```bash
-go run main.go
+go run cmd/main.go
 ```
 
 O servidor será iniciado na porta `8080`.
