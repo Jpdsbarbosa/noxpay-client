@@ -13,7 +13,7 @@ Este projeto implementa um cliente para a API da NoxPay, que permite a criação
 
 ```bash
 git clone https://github.com/Jpdsbarbosa/noxpay-client.git
-cd noxpay-client
+cd cmd/noxpay-client
 ```
 
 2. Instale as dependências:
